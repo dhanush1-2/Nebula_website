@@ -3,6 +3,8 @@
 import { useXAI } from "@/context/XAIContext";
 import { Building2, Award } from "lucide-react";
 import TokenText from "@/components/TokenText";
+import { motion } from "framer-motion";
+import NeuralDecrypt from "@/components/NeuralDecrypt";
 
 const milestones = [
   {
@@ -46,9 +48,9 @@ export default function Experience() {
         
         <div className="mb-16">
           <h2 className="text-3xl font-bold text-slate tracking-tight mb-2">
-            Experience
+            <NeuralDecrypt text="Experience Log" speed={25} />
           </h2>
-          <p className="text-slate-light font-plex text-sm max-w-2xl">
+          <p className="text-slate-light font-plex text-sm max-w-2xl mt-4">
             A chronological record of engineering environments, system integrations, and professional certifications.
           </p>
         </div>
@@ -59,7 +61,14 @@ export default function Experience() {
             const details = mode === "technical" ? milestone.technicalDetails : milestone.storyDetails;
             
             return (
-              <div key={index} className="flex flex-col md:flex-row gap-6 md:gap-12 group">
+              <motion.div 
+                key={index} 
+                className="flex flex-col md:flex-row gap-6 md:gap-12 group"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+              >
                 
                 {/* Left side: Meta Info */}
                 <div className="md:w-1/3 flex flex-col md:items-end md:text-right pt-1">
@@ -84,8 +93,23 @@ export default function Experience() {
 
                 {/* Vertical Divider (Desktop) */}
                 <div className="hidden md:flex flex-col items-center">
-                  <div className="w-3 h-3 rounded-full border-2 border-cobalt bg-white z-10"></div>
-                  <div className="w-px h-full bg-gray-200 -mt-1 group-last:bg-transparent"></div>
+                  <motion.div 
+                    initial={{ scale: 0.5, backgroundColor: "#fff" }}
+                    whileInView={{ scale: 1, backgroundColor: "#2E5BFF" }}
+                    viewport={{ once: true, margin: "-100px" }}
+                    transition={{ duration: 0.4 }}
+                    className="w-3 h-3 rounded-full border-2 border-cobalt z-10"
+                  ></motion.div>
+                  <div className="w-px h-full bg-gray-200 -mt-1 group-last:bg-transparent relative overflow-hidden">
+                    <motion.div 
+                      className="absolute top-0 left-0 w-full bg-cobalt origin-top group-last:hidden"
+                      initial={{ scaleY: 0 }}
+                      whileInView={{ scaleY: 1 }}
+                      viewport={{ once: true, margin: "-100px" }}
+                      transition={{ duration: 0.8, ease: "easeOut" }}
+                      style={{ height: "100%" }}
+                    />
+                  </div>
                 </div>
 
                 {/* Right side: Content */}
@@ -106,7 +130,7 @@ export default function Experience() {
                   </ul>
                 </div>
 
-              </div>
+              </motion.div>
             );
           })}
         </div>

@@ -65,7 +65,8 @@ export default function InteractiveLatentMap() {
 
         ctx.beginPath();
         ctx.arc(p.x, p.y, 1.5, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(100, 116, 139, 0.2)"; // Slate light
+        ctx.fillStyle = "rgba(100, 116, 139, 0.3)"; // Slate light (a bit more visible)
+        ctx.shadowBlur = 0; // reset for points
         ctx.fill();
       });
 
@@ -85,19 +86,24 @@ export default function InteractiveLatentMap() {
             const mouseDy = midY - mouseY;
             const mouseDist = Math.sqrt(mouseDx * mouseDx + mouseDy * mouseDy);
 
-            if (mouseDist < 200) {
-              const opacity = 1 - mouseDist / 200;
+            if (mouseDist < 250) {
+              const opacity = 1 - mouseDist / 250;
               ctx.beginPath();
               ctx.moveTo(particles[i].x, particles[i].y);
               ctx.lineTo(particles[j].x, particles[j].y);
-              ctx.strokeStyle = `rgba(46, 91, 255, ${opacity * 0.5})`; // Cobalt
+              ctx.lineWidth = 1 + opacity * 1.5; // Thicker lines when close
+              ctx.strokeStyle = `rgba(46, 91, 255, ${opacity * 0.8})`; // Cobalt, brighter
+              ctx.shadowBlur = 15;
+              ctx.shadowColor = "rgba(46, 91, 255, 0.8)";
               ctx.stroke();
             } else {
               // faint generic connection
               ctx.beginPath();
               ctx.moveTo(particles[i].x, particles[i].y);
               ctx.lineTo(particles[j].x, particles[j].y);
-              ctx.strokeStyle = `rgba(100, 116, 139, 0.03)`;
+              ctx.lineWidth = 0.5;
+              ctx.strokeStyle = `rgba(100, 116, 139, 0.05)`;
+              ctx.shadowBlur = 0;
               ctx.stroke();
             }
           }

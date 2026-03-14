@@ -1,18 +1,28 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { User, Terminal } from "lucide-react";
 import { useXAI } from "@/context/XAIContext";
 import InteractiveLatentMap from "@/components/InteractiveLatentMap";
 import GlassCube from "@/components/GlassCube";
 import TokenText from "@/components/TokenText";
+import MagneticButton from "@/components/MagneticButton";
 
 export default function Hero() {
   const { mode } = useXAI();
   const [showCorrection, setShowCorrection] = useState(false);
-
   const [factIndex, setFactIndex] = useState(0);
+
+  const targetRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: targetRef,
+    offset: ["start start", "end start"],
+  });
+
+  const sectionOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+  const sectionScale = useTransform(scrollYProgress, [0, 1], [1, 0.9]);
+  const sectionY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
 
   const facts = [
     {
@@ -44,12 +54,6 @@ export default function Hero() {
       hallucinatedText: "just experimenting.",
       technicalCorrected: "AI/ML engineer who ships, not just experiments.",
       storyCorrected: "I build AI systems. They tend to work."
-    },
-    {
-      rawText: "Output Evaluation: ",
-      hallucinatedText: "unverified outputs.",
-      technicalCorrected: "AI engineer. Real systems. Measurable results. Hire me.",
-      storyCorrected: "Less buzzwords, more models that actually hit production."
     }
   ];
 
@@ -80,14 +84,19 @@ export default function Hero() {
   };
 
   return (
-    <section id="hero" className="w-full min-h-[90vh] flex flex-col items-center justify-center px-4 py-20 relative overflow-hidden">
+    <section ref={targetRef} id="hero" className="w-full min-h-[90vh] flex flex-col items-center justify-center px-4 py-20 relative overflow-hidden">
       
       {/* Background Interactions */}
-      <InteractiveLatentMap />
-      <GlassCube />
+      <motion.div style={{ opacity: sectionOpacity }} className="absolute inset-0 z-0 pointer-events-none">
+        <InteractiveLatentMap />
+        <GlassCube />
+      </motion.div>
       
       {/* Central Chat Container */}
-      <div className="w-full max-w-3xl bg-white/90 backdrop-blur-md border border-gray-200 rounded-2xl shadow-sm overflow-hidden flex flex-col relative z-20">
+      <motion.div 
+        style={{ opacity: sectionOpacity, scale: sectionScale, y: sectionY }}
+        className="w-full max-w-3xl bg-white/90 backdrop-blur-md border border-gray-200 rounded-2xl shadow-sm overflow-hidden flex flex-col relative z-20"
+      >
         
         {/* Header Bar */}
         <div className="bg-gray-50/90 border-b border-gray-200 px-4 py-3 flex items-center justify-between">
@@ -196,34 +205,42 @@ export default function Hero() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.5, delay: 2 }}
-                className="mt-8 flex flex-wrap gap-3"
+                className="mt-8 flex flex-wrap gap-4 items-center"
               >
-                <a 
-                  href="#contact"
-                  className="px-5 py-2.5 bg-slate text-white text-sm font-medium rounded-lg hover:bg-slate-light transition-colors"
-                >
-                  Initiate Project
-                </a>
-                <a 
-                  href="/Dhanush_Resume.docx"
-                  download="Dhanush_Chandra_Shekar_Resume.docx"
-                  className="px-5 py-2.5 bg-white border border-gray-200 text-slate text-sm font-medium rounded-lg hover:bg-gray-50 hover:border-gray-300 transition-colors"
-                >
-                  Download CV
-                </a>
-                <a 
-                  href="#projects"
-                  className="px-5 py-2.5 text-cobalt text-sm font-medium hover:underline self-center ml-2"
-                >
-                  View Case Studies &rarr;
-                </a>
+                <MagneticButton intensity={0.4}>
+                  <a 
+                    href="#contact"
+                    className="px-5 py-2.5 bg-slate text-white text-sm font-medium rounded-lg hover:bg-slate-light transition-colors block"
+                  >
+                    Initiate Project
+                  </a>
+                </MagneticButton>
+                
+                <MagneticButton intensity={0.2}>
+                  <a 
+                    href="/Dhanush_Resume.docx"
+                    download="Dhanush_Chandra_Shekar_Resume.docx"
+                    className="px-5 py-2.5 bg-white border border-gray-200 text-slate text-sm font-medium rounded-lg hover:bg-gray-50 hover:border-gray-300 transition-colors block"
+                  >
+                    Download CV
+                  </a>
+                </MagneticButton>
+                
+                <MagneticButton intensity={0.15}>
+                  <a 
+                    href="#projects"
+                    className="px-5 py-2.5 text-cobalt text-sm font-medium hover:underline block"
+                  >
+                    View Case Studies &rarr;
+                  </a>
+                </MagneticButton>
               </motion.div>
 
             </div>
           </motion.div>
 
         </div>
-      </div>
+      </motion.div>
 
     </section>
   );

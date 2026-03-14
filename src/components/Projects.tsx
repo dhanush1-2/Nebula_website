@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useRef } from "react";
+import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { ExternalLink, GitMerge, FileText, Database, Network } from "lucide-react";
 import { useXAI } from "@/context/XAIContext";
 import TokenText from "@/components/TokenText";
 import InferenceProgress from "@/components/InferenceProgress";
 import OptimizingCard from "@/components/OptimizingCard";
+import NeuralDecrypt from "@/components/NeuralDecrypt";
 
 const customProjects = [
   {
@@ -103,6 +104,15 @@ export default function Projects() {
   const [expandedId, setExpandedId] = useState<number | null>(null);
   const [loadingFlowId, setLoadingFlowId] = useState<number | null>(null);
 
+  const targetRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: targetRef,
+    offset: ["start end", "end start"],
+  });
+
+  const yMiddle = useTransform(scrollYProgress, [0, 1], ["0px", "-60px"]);
+  const yOuter = useTransform(scrollYProgress, [0, 1], ["0px", "40px"]);
+
   const toggleLogicFlow = (id: number) => {
     if (expandedId === id) {
       setExpandedId(null);
@@ -114,14 +124,14 @@ export default function Projects() {
   };
 
   return (
-    <section id="projects" className="w-full py-24 px-4 bg-gallery relative overflow-hidden scroll-mt-24">
+    <section ref={targetRef} id="projects" className="w-full py-24 px-4 bg-gallery relative overflow-hidden scroll-mt-24">
       <div className="max-w-6xl mx-auto z-10 relative">
         
         <div className="mb-16">
           <h2 className="text-3xl font-bold text-slate tracking-tight mb-2">
-            Projects
+            <NeuralDecrypt text="Projects & Case Studies" className="font-bold" speed={20} />
           </h2>
-          <p className="text-slate-light font-plex text-sm max-w-2xl">
+          <p className="text-slate-light font-plex text-sm max-w-2xl mt-4">
             Selected case studies demonstrating production-grade AI implementations and data pipelines.
           </p>
         </div>
@@ -131,9 +141,13 @@ export default function Projects() {
             const description = mode === "technical" ? project.technicalDescription : project.storyDescription;
             const isExpanded = expandedId === project.id;
             
+            const isMiddle = index % 3 === 1;
+            const yTransform = isMiddle ? yMiddle : yOuter;
+
             return (
-              <OptimizingCard key={project.id} delay={index * 0.1}>
-                {/* Card Header */}
+              <motion.div key={project.id} style={{ y: yTransform }} layout className="flex flex-col h-full">
+                <OptimizingCard delay={index * 0.1}>
+                  {/* Card Header */}
                 <div className="p-6 border-b border-gray-100 bg-gray-50/50" data-semantic-tag={`[Model: ${project.name}]`}>
                   <div className="flex justify-between items-start mb-4">
                     <h3 className="text-xl font-bold text-slate leading-tight">
@@ -234,6 +248,7 @@ export default function Projects() {
                 </AnimatePresence>
 
               </OptimizingCard>
+            </motion.div>
             );
           })}
         </div>

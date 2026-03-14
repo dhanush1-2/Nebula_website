@@ -3,7 +3,19 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 
-export default function OptimizingCard({ children, delay = 0 }: { children: React.ReactNode, delay?: number }) {
+export default function OptimizingCard({ 
+  children, 
+  delay = 0, 
+  layout,
+  className = "",
+  whileHover
+}: { 
+  children: React.ReactNode, 
+  delay?: number, 
+  layout?: boolean,
+  className?: string,
+  whileHover?: any
+}) {
   const [status, setStatus] = useState<"idle" | "optimizing" | "optimized">("idle");
   const [message, setMessage] = useState("[Analysing_Query...]");
 
@@ -20,9 +32,11 @@ export default function OptimizingCard({ children, delay = 0 }: { children: Reac
 
   return (
     <motion.div 
+      layout={layout}
+      whileHover={whileHover}
       onViewportEnter={handleViewportEnter}
       viewport={{ once: true, margin: "-100px" }}
-      className="relative flex flex-col h-full rounded-xl bg-white border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300"
+      className={`relative flex flex-col h-full rounded-xl bg-white border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 ${className}`}
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay }}

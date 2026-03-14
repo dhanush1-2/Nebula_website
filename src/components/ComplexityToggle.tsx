@@ -32,7 +32,7 @@ export default function ComplexityToggle() {
 
         {/* Technical Button */}
         <button
-          onClick={() => mode !== "technical" && toggleMode()}
+          onClick={(e) => mode !== "technical" && toggleMode(e)}
           className={`relative z-10 w-1/2 h-full text-xs font-semibold uppercase tracking-wider transition-colors duration-300 ${
             mode === "technical" ? "text-cobalt" : "text-slate-light hover:text-slate"
           }`}
@@ -42,7 +42,7 @@ export default function ComplexityToggle() {
 
         {/* Story Button */}
         <button
-          onClick={() => mode !== "story" && toggleMode()}
+          onClick={(e) => mode !== "story" && toggleMode(e)}
           className={`relative z-10 w-1/2 h-full text-xs font-semibold uppercase tracking-wider transition-colors duration-300 ${
             mode === "story" ? "text-copper" : "text-slate-light hover:text-slate"
           }`}

@@ -24,6 +24,7 @@ import AgenticTracker from "@/components/AgenticTracker";
 import CommandPalette from "@/components/CommandPalette";
 import SemanticCursor from "@/components/SemanticCursor";
 import ScrollRestorationFix from "@/components/ScrollRestorationFix";
+import SmoothScrolling from "@/components/SmoothScrolling";
 
 export default function RootLayout({
   children,
@@ -31,16 +32,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="en">
       <body className={`${inter.variable} ${plexMono.variable} antialiased font-sans relative`}>
-        <XAIProvider>
-          {children}
-          <ScrollRestorationFix />
-          <SemanticCursor />
-          <ComplexityToggle />
-          <AgenticTracker />
-          <CommandPalette />
-        </XAIProvider>
+        <SmoothScrolling>
+          <XAIProvider>
+            {children}
+            <ScrollRestorationFix />
+            <SemanticCursor />
+            <ComplexityToggle />
+            <AgenticTracker />
+            <CommandPalette />
+          </XAIProvider>
+        </SmoothScrolling>
       </body>
     </html>
   );

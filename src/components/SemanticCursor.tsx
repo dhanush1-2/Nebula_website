@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 export default function SemanticCursor() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [hoveredTag, setHoveredTag] = useState<string | null>(null);
+  const [isHoveringAction, setIsHoveringAction] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [mounted, setMounted] = useState(false);
 
@@ -23,9 +24,21 @@ export default function SemanticCursor() {
       const semanticElement = target.closest('[data-semantic-tag]');
       
       if (semanticElement) {
-        setHoveredTag(semanticElement.getAttribute('data-semantic-tag'));
+        const tag = semanticElement.getAttribute('data-semantic-tag');
+        setHoveredTag(tag);
+        // Treat Action_Node slightly differently for cursor behavior
+        if (tag === '[Action_Node]') setIsHoveringAction(true);
+        else setIsHoveringAction(false);
       } else {
         setHoveredTag(null);
+        
+        // Also check standard clickable elements
+        const clickable = target.closest('a, button');
+        if (clickable) {
+          setIsHoveringAction(true);
+        } else {
+          setIsHoveringAction(false);
+        }
       }
     };
 
@@ -48,14 +61,17 @@ export default function SemanticCursor() {
     <>
       {/* The Lens Effect */}
       <motion.div
-        className="fixed top-0 left-0 w-8 h-8 rounded-full border border-cobalt/30 pointer-events-none z-[100] mix-blend-difference hidden md:block"
+        className="fixed top-0 left-0 rounded-full pointer-events-none z-[100] mix-blend-difference hidden md:block"
         animate={{
-          x: mousePosition.x - 16,
-          y: mousePosition.y - 16,
-          scale: hoveredTag ? 1.5 : 1,
-          backgroundColor: hoveredTag ? "rgba(46, 91, 255, 0.1)" : "transparent"
+          x: mousePosition.x - (isHoveringAction ? 24 : 16),
+          y: mousePosition.y - (isHoveringAction ? 24 : 16),
+          width: isHoveringAction ? 48 : 32,
+          height: isHoveringAction ? 48 : 32,
+          scale: (hoveredTag && !isHoveringAction) ? 1.5 : 1,
+          backgroundColor: isHoveringAction ? "#ffffff" : "transparent",
+          border: isHoveringAction ? "none" : "1px solid rgba(255,255,255,0.5)"
         }}
-        transition={{ type: "spring", stiffness: 500, damping: 28, mass: 0.5 }}
+        transition={{ type: "spring", stiffness: 400, damping: 28, mass: 0.5 }}
       />
       
       {/* The Central Dot */}
