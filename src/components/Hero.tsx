@@ -1,69 +1,230 @@
 "use client";
 
-import { motion } from "framer-motion";
-import BlackHoleDataVis from "./BlackHoleDataVis";
-import { Terminal } from "lucide-react";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { User, Terminal } from "lucide-react";
+import { useXAI } from "@/context/XAIContext";
+import InteractiveLatentMap from "@/components/InteractiveLatentMap";
+import GlassCube from "@/components/GlassCube";
+import TokenText from "@/components/TokenText";
 
 export default function Hero() {
+  const { mode } = useXAI();
+  const [showCorrection, setShowCorrection] = useState(false);
+
+  const [factIndex, setFactIndex] = useState(0);
+
+  const facts = [
+    {
+      rawText: "Core Directive: ",
+      hallucinatedText: "building hype.",
+      technicalCorrected: "Building AI systems that actually work in production.",
+      storyCorrected: "Making AI less hype, more working software."
+    },
+    {
+      rawText: "Identity Classification: ",
+      hallucinatedText: "average coder.",
+      technicalCorrected: "MS Data Science student obsessed with real AI.",
+      storyCorrected: "Data scientist. ML engineer. Recovering perfectionist. Mostly harmless."
+    },
+    {
+      rawText: "Objective Function: ",
+      hallucinatedText: "following tutorials.",
+      technicalCorrected: "Turning LLM research into tools people actually use.",
+      storyCorrected: "Wiring up LLMs so you don't have to."
+    },
+    {
+      rawText: "System Architecture: ",
+      hallucinatedText: "basic web scripts.",
+      technicalCorrected: "From raw data to production ML, end to end.",
+      storyCorrected: "RAG pipelines by day, resume tweaking by night."
+    },
+    {
+      rawText: "Operational Status: ",
+      hallucinatedText: "just experimenting.",
+      technicalCorrected: "AI/ML engineer who ships, not just experiments.",
+      storyCorrected: "I build AI systems. They tend to work."
+    },
+    {
+      rawText: "Output Evaluation: ",
+      hallucinatedText: "unverified outputs.",
+      technicalCorrected: "AI engineer. Real systems. Measurable results. Hire me.",
+      storyCorrected: "Less buzzwords, more models that actually hit production."
+    }
+  ];
+
+  useEffect(() => {
+    // Pick random fact on mount, avoiding server/client mismatch by doing it in useEffect
+    setFactIndex(Math.floor(Math.random() * facts.length));
+  }, []);
+
+  useEffect(() => {
+    // Reset animation state when mode changes
+    setShowCorrection(false);
+    const timer = setTimeout(() => {
+      setShowCorrection(true);
+    }, 2500); // Wait for initial typing to finish before correcting
+    return () => clearTimeout(timer);
+  }, [mode, factIndex]);
+
+  const currentFact = facts[factIndex];
+  const rawText = currentFact.rawText;
+  const hallucinatedText = currentFact.hallucinatedText;
+  const correctedText = mode === "technical" 
+    ? currentFact.technicalCorrected
+    : currentFact.storyCorrected;
+
+  const typingCharacter = {
+    hidden: { opacity: 0, scale: 0.8 },
+    show: { opacity: 1, scale: 1 },
+  };
+
   return (
-    <section className="relative w-full h-screen flex flex-col md:flex-row items-center justify-between overflow-hidden bg-obsidian pt-16">
-      <div className="absolute inset-0 z-0">
-        <BlackHoleDataVis />
-      </div>
+    <section id="hero" className="w-full min-h-[90vh] flex flex-col items-center justify-center px-4 py-20 relative overflow-hidden">
       
-      <div className="z-10 text-center md:text-left px-4 sm:px-8 max-w-2xl md:ml-12 pointer-events-none mt-20 md:mt-0">
-        <motion.div
-          initial={{ opacity: 0, x: -50 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="flex flex-col items-center md:items-start"
-        >
-          <div className="mb-4 md:mb-6 p-3 md:p-4 rounded-full border border-pulsar/30 bg-black/40 backdrop-blur-md">
-            <Terminal className="w-6 h-6 md:w-8 md:h-8 text-pulsar" />
+      {/* Background Interactions */}
+      <InteractiveLatentMap />
+      <GlassCube />
+      
+      {/* Central Chat Container */}
+      <div className="w-full max-w-3xl bg-white/90 backdrop-blur-md border border-gray-200 rounded-2xl shadow-sm overflow-hidden flex flex-col relative z-20">
+        
+        {/* Header Bar */}
+        <div className="bg-gray-50/90 border-b border-gray-200 px-4 py-3 flex items-center justify-between">
+          <div className="flex space-x-2">
+            <div className="w-3 h-3 rounded-full bg-red-400"></div>
+            <div className="w-3 h-3 rounded-full bg-amber-400"></div>
+            <div className="w-3 h-3 rounded-full bg-green-400"></div>
           </div>
+          <span className="text-xs font-plex text-gray-400 uppercase tracking-widest hidden sm:block">
+            System Prompt // v2.0
+          </span>
+          <span className="text-[10px] font-plex text-gray-400 uppercase tracking-widest sm:hidden">
+            Press / to Search
+          </span>
+        </div>
 
-          <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold tracking-tight text-neutron mb-2 md:mb-4 drop-shadow-[0_0_10px_rgba(0,0,0,0.8)]">
-            Dhanush <span className="text-pulsar text-glow-pulsar block md:inline mt-2 md:mt-0">Chandra Shekar</span>
-          </h1>
+        {/* Chat History */}
+        <div className="p-6 md:p-10 flex flex-col gap-8">
+          
+          {/* User Message */}
+          <motion.div 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="flex gap-4"
+          >
+            <div className="w-8 h-8 rounded-full bg-copper flex items-center justify-center flex-shrink-0 mt-1">
+              <User className="w-5 h-5 text-white" />
+            </div>
+            <div className="flex-1">
+              <p className="text-sm font-semibold text-slate mb-1">User</p>
+              <p className="text-slate-light text-lg">Who is Dhanush Chandra Shekar?</p>
+            </div>
+          </motion.div>
 
-          <h2 className="text-lg sm:text-xl md:text-2xl text-neutron/80 font-light mb-4 md:mb-6 tracking-wide drop-shadow-[0_0_10px_rgba(0,0,0,0.8)]">
-            Navigating the AI Frontier
-          </h2>
+          {/* Assistant Message */}
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+            className="flex gap-4"
+          >
+            <div className="w-8 h-8 rounded flex items-center justify-center flex-shrink-0 mt-1 bg-cobalt">
+              <Terminal className="w-4 h-4 text-white" />
+            </div>
+            <div className="flex-1">
+              <p className="text-sm font-semibold text-cobalt mb-1">System</p>
+              
+              <div className="text-slate text-lg leading-relaxed font-medium min-h-[80px]">
+                {/* 1. Base Text */}
+                <motion.span>
+                  {rawText.split("").map((char, index) => (
+                    <motion.span 
+                      key={`raw-${index}`} 
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.05, delay: index * 0.03 }}
+                    >
+                      {char}
+                    </motion.span>
+                  ))}
+                </motion.span>
+                
+                {/* 2. Hallucinated Text (Gets crossed out) */}
+                <span className="relative inline-block">
+                  <motion.span>
+                    {hallucinatedText.split("").map((char, index) => (
+                      <motion.span 
+                        key={`hal-${index}`}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.05, delay: (rawText.length * 0.03) + (index * 0.03) }}
+                      >
+                        {char}
+                      </motion.span>
+                    ))}
+                  </motion.span>
+                  {/* The red strikethrough */}
+                  <motion.div 
+                    className="absolute left-0 top-1/2 h-[3px] bg-red-500 rounded-full w-full origin-left"
+                    initial={{ scaleX: 0, opacity: 0 }}
+                    animate={showCorrection ? { scaleX: 1, opacity: 0.8 } : { scaleX: 0, opacity: 0 }}
+                    transition={{ duration: 0.3, ease: "easeOut" }}
+                  />
+                </span>
 
-          <p className="text-sm sm:text-base md:text-lg text-neutron/70 mb-8 md:mb-10 leading-relaxed drop-shadow-[0_0_10px_rgba(0,0,0,0.8)] max-w-md md:max-w-full">
-            Building RAG pipelines, Agentic workflows, and Fine-tuned models to turn the chaos of data into organized intelligence.
-          </p>
+                {/* 3. Corrected Text */}
+                <AnimatePresence>
+                  {showCorrection && (
+                    <motion.span 
+                      className="ml-2 text-cobalt relative"
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.4 }}
+                    >
+                      {/* Subtly render a logic node icon */}
+                      <span className="absolute -left-3 top-2 w-1.5 h-1.5 rounded-sm bg-cobalt opacity-50"></span>
+                      {correctedText}
+                    </motion.span>
+                  )}
+                </AnimatePresence>
+              </div>
 
-          <div className="flex flex-col sm:flex-row gap-4 pointer-events-auto w-full sm:w-auto mt-2 px-4 sm:px-0">
-            <motion.a
-              whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(255, 69, 0, 0.5)" }}
-              whileTap={{ scale: 0.95 }}
-              href="#contact"
-              className="w-full sm:w-auto px-8 py-3 rounded-md bg-supernova text-obsidian font-semibold transition-all relative overflow-hidden group text-center"
-            >
-              <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform" />
-              <span className="relative z-10">Initiate Contact</span>
-            </motion.a>
-            <motion.a
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              href="/Dhanush_Resume.docx"
-              download="Dhanush_Chandra_Shekar_Resume.docx"
-              className="w-full sm:w-auto px-8 py-3 rounded-md border border-pulsar text-pulsar hover:bg-pulsar/10 transition-all backdrop-blur-sm text-center flex items-center justify-center gap-2"
-            >
-               Download Resume ↓
-            </motion.a>
-            <motion.a
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              href="#projects"
-              className="w-full sm:w-auto px-8 py-3 rounded-md border border-neutron/30 text-neutron/80 hover:bg-white/5 transition-all backdrop-blur-sm text-center"
-            >
-              View Star Map
-            </motion.a>
-          </div>
-        </motion.div>
+              {/* Action Buttons */}
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5, delay: 2 }}
+                className="mt-8 flex flex-wrap gap-3"
+              >
+                <a 
+                  href="#contact"
+                  className="px-5 py-2.5 bg-slate text-white text-sm font-medium rounded-lg hover:bg-slate-light transition-colors"
+                >
+                  Initiate Project
+                </a>
+                <a 
+                  href="/Dhanush_Resume.docx"
+                  download="Dhanush_Chandra_Shekar_Resume.docx"
+                  className="px-5 py-2.5 bg-white border border-gray-200 text-slate text-sm font-medium rounded-lg hover:bg-gray-50 hover:border-gray-300 transition-colors"
+                >
+                  Download CV
+                </a>
+                <a 
+                  href="#projects"
+                  className="px-5 py-2.5 text-cobalt text-sm font-medium hover:underline self-center ml-2"
+                >
+                  View Case Studies &rarr;
+                </a>
+              </motion.div>
+
+            </div>
+          </motion.div>
+
+        </div>
       </div>
+
     </section>
   );
 }

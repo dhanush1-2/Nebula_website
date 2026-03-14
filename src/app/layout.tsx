@@ -1,18 +1,29 @@
 import type { Metadata } from "next";
-import { Outfit } from "next/font/google";
+import { Inter, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 
-const outfit = Outfit({
-  variable: "--font-outfit",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
 });
 
-import CustomCursor from "@/components/CustomCursor";
+const plexMono = IBM_Plex_Mono({
+  variable: "--font-ibm-plex-mono",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
 
 export const metadata: Metadata = {
   title: "Dhanush Chandra Shekar | AI Engineer",
   description: "Portfolio of Dhanush Chandra Shekar, an AI Engineer specializing in RAG pipelines, Agentic workflows, and Fine-tuned models.",
 };
+
+import { XAIProvider } from "@/context/XAIContext";
+import ComplexityToggle from "@/components/ComplexityToggle";
+import AgenticTracker from "@/components/AgenticTracker";
+import CommandPalette from "@/components/CommandPalette";
+import SemanticCursor from "@/components/SemanticCursor";
+import ScrollRestorationFix from "@/components/ScrollRestorationFix";
 
 export default function RootLayout({
   children,
@@ -21,11 +32,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body
-        className={`${outfit.variable} antialiased bg-obsidian text-neutron font-sans selection:bg-pulsar/30 selection:text-pulsar cursor-none`}
-      >
-        <CustomCursor />
-        {children}
+      <body className={`${inter.variable} ${plexMono.variable} antialiased font-sans relative`}>
+        <XAIProvider>
+          {children}
+          <ScrollRestorationFix />
+          <SemanticCursor />
+          <ComplexityToggle />
+          <AgenticTracker />
+          <CommandPalette />
+        </XAIProvider>
       </body>
     </html>
   );

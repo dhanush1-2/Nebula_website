@@ -1,118 +1,115 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Briefcase, Award } from "lucide-react";
+import { useXAI } from "@/context/XAIContext";
+import { Building2, Award } from "lucide-react";
+import TokenText from "@/components/TokenText";
 
 const milestones = [
   {
     role: "Research Assistant – AI & LLM Engineering",
     company: "Indiana University, Kelley School of Business",
-    date: "June 2025 – Present",
-    type: "experience",
-    icon: Briefcase,
-    color: "pulsar",
-    details: [
+    date: "June 2024 – Present",
+    status: "ACTIVE",
+    icon: Building2,
+    technicalDetails: [
       "Designed and deployed an end-to-end LLM pipeline adopted daily by faculty, combining RAG, information retrieval, and automated evaluation.",
       "Reduced AI output inaccuracies 30–40% by iterating on retrieval configurations and prompt engineering strategies.",
       "Defined KPI thresholds and success metrics for AI model outputs, enabling reproducible benchmarking."
+    ],
+    storyDetails: [
+      "Built a secure AI system used daily by professors to process complex academic data much faster than manual methods.",
+      "Identified why the AI was giving wrong answers and fixed the underlying logic, making the tool 40% more accurate.",
+      "Created a standardized testing system so the university can confidently trust the AI's output before using it in classrooms."
     ]
   },
   {
     role: "AWS Certified AI Practitioner",
     company: "Amazon Web Services",
     date: "2024",
-    type: "certification",
+    status: "ACHIEVED",
     icon: Award,
-    color: "supernova",
-    details: [
+    technicalDetails: [
       "Official credential validating overall understanding of AI, ML, and generative AI concepts and use cases on AWS."
+    ],
+    storyDetails: [
+      "Certified by Amazon in the foundational principles of building, securing, and deploying Artificial Intelligence securely in the cloud."
     ]
   }
 ];
 
 export default function Experience() {
+  const { mode } = useXAI();
+
   return (
-    <section id="experience" className="relative w-full py-20 px-4 bg-obsidian border-t border-pulsar/10 overflow-hidden">
-      <div className="max-w-4xl mx-auto z-10 relative flex flex-col items-center">
+    <section id="experience" className="w-full py-24 px-4 bg-white border-t border-gray-100 relative scroll-mt-24">
+      <div className="max-w-4xl mx-auto">
         
-        <div className="flex flex-col items-center mb-20 text-center">
-          <h2 className="text-3xl md:text-5xl font-bold text-neutron uppercase tracking-wide">
-            The <span className="text-pulsar text-glow-pulsar">Flight Log</span>
+        <div className="mb-16">
+          <h2 className="text-3xl font-bold text-slate tracking-tight mb-2">
+            Experience
           </h2>
+          <p className="text-slate-light font-plex text-sm max-w-2xl">
+            A chronological record of engineering environments, system integrations, and professional certifications.
+          </p>
         </div>
 
-        {/* Timeline Container */}
-        <div className="relative w-full">
-          {/* Vertical Trajectory Line */}
-          <div className="absolute left-[39px] md:left-1/2 top-0 bottom-0 w-[2px] bg-pulsar/20 transform md:-translate-x-1/2 rounded-full hidden sm:block">
-            <motion.div 
-              className="absolute top-0 w-full bg-gradient-to-b from-pulsar via-pulsar to-transparent shadow-[0_0_10px_#00F0FF]"
-              initial={{ height: "0%" }}
-              whileInView={{ height: "100%" }}
-              viewport={{ once: true }}
-              transition={{ duration: 1.5, ease: "easeInOut" }}
-            />
-          </div>
-
-          <div className="space-y-16 lg:space-y-24">
-            {milestones.map((milestone, index) => {
-              const isEven = index % 2 === 0;
-              const Icon = milestone.icon;
-              const accentColor = milestone.color === "pulsar" ? "text-pulsar border-pulsar/50 shadow-[0_0_15px_rgba(0,240,255,0.2)]" : "text-supernova border-supernova/50 shadow-[0_0_15px_rgba(255,69,0,0.2)]";
-              const glowColor = milestone.color === "pulsar" ? "bg-pulsar" : "bg-supernova";
-
-              return (
-                <div key={index} className={`relative flex flex-col md:flex-row items-center gap-8 md:gap-16 w-full ${isEven ? 'md:flex-row-reverse' : ''}`}>
-                  
-                  {/* Empty space for alternating layout on desktop */}
-                  <div className="hidden md:block md:w-1/2" />
-                  
-                  {/* Timeline Node */}
-                  <div className={`absolute left-[15px] sm:left-[39px] md:left-1/2 w-12 h-12 rounded-full border-2 bg-obsidian flex items-center justify-center transform -translate-x-1/2 z-20 ${accentColor}`}>
-                    <Icon className={`w-5 h-5 ${milestone.color === "pulsar" ? "text-pulsar" : "text-supernova"}`} />
-                    {/* Pulsing ring */}
-                    <motion.div 
-                      animate={{ scale: [1, 1.5, 1], opacity: [0.5, 0, 0.5] }}
-                      transition={{ duration: 2, repeat: Infinity }}
-                      className={`absolute w-full h-full rounded-full ${glowColor} opacity-20`}
-                    />
+        <div className="space-y-12">
+          {milestones.map((milestone, index) => {
+            const Icon = milestone.icon;
+            const details = mode === "technical" ? milestone.technicalDetails : milestone.storyDetails;
+            
+            return (
+              <div key={index} className="flex flex-col md:flex-row gap-6 md:gap-12 group">
+                
+                {/* Left side: Meta Info */}
+                <div className="md:w-1/3 flex flex-col md:items-end md:text-right pt-1">
+                  <div className="flex items-center md:justify-end gap-2 mb-2">
+                    {milestone.status === "ACTIVE" && (
+                      <span className="flex h-2 w-2 relative">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                      </span>
+                    )}
+                    <span className="text-xs font-plex font-bold tracking-widest text-slate-light">
+                      [STATUS: {milestone.status}]
+                    </span>
                   </div>
-
-                  {/* Content Card */}
-                  <motion.div 
-                    initial={{ opacity: 0, x: isEven ? 50 : -50 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true, margin: "-100px" }}
-                    transition={{ duration: 0.6, delay: 0.2 }}
-                    className="ml-16 sm:ml-24 md:ml-0 md:w-1/2"
-                  >
-                    <div className="p-6 md:p-8 rounded-xl bg-pulsar/5 border border-pulsar/10 hover:border-pulsar/30 transition-colors relative backdrop-blur-sm">
-                      <div className={`text-xs font-mono mb-2 ${milestone.color === "pulsar" ? "text-pulsar" : "text-supernova"}`}>
-                        {milestone.date}
-                      </div>
-                      <h3 className="text-xl md:text-2xl font-bold text-neutron mb-1">
-                        {milestone.role}
-                      </h3>
-                      <h4 className="text-sm font-semibold text-neutron/70 mb-4 tracking-wide uppercase">
-                        {milestone.company}
-                      </h4>
-                      <ul className="space-y-3">
-                        {milestone.details.map((detail, i) => (
-                          <li key={i} className="flex items-start gap-3 text-neutron/60 text-sm leading-relaxed">
-                            <span className={`mt-1.5 w-1.5 h-1.5 rounded-full flex-shrink-0 ${glowColor}`} />
-                            <span>{detail}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </motion.div>
-
+                  <div className="text-slate-light text-sm font-semibold mb-1">{milestone.date}</div>
+                  <div className="flex items-center md:items-start md:justify-end gap-2 text-copper">
+                    <Icon className="w-4 h-4 md:hidden" />
+                    <span className="text-sm font-medium font-plex tracking-wider">[Entity: {milestone.company}]</span>
+                    <Icon className="w-4 h-4 hidden md:block" />
+                  </div>
                 </div>
-              );
-            })}
-          </div>
-        </div>
 
+                {/* Vertical Divider (Desktop) */}
+                <div className="hidden md:flex flex-col items-center">
+                  <div className="w-3 h-3 rounded-full border-2 border-cobalt bg-white z-10"></div>
+                  <div className="w-px h-full bg-gray-200 -mt-1 group-last:bg-transparent"></div>
+                </div>
+
+                {/* Right side: Content */}
+                <div className="md:w-2/3 pb-8 md:pb-12 group-last:pb-0">
+                  <h3 className="text-xl font-bold text-slate mb-4">
+                    {milestone.role}
+                  </h3>
+                  
+                  <ul className="space-y-4">
+                    {details.map((detail, i) => (
+                      <li key={i} className="flex items-start gap-3">
+                        <span className="mt-2 w-1.5 h-1.5 rounded-sm bg-cobalt flex-shrink-0"></span>
+                        <p className="text-slate-light leading-relaxed">
+                          <TokenText>{detail}</TokenText>
+                        </p>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+              </div>
+            );
+          })}
+        </div>
       </div>
     </section>
   );

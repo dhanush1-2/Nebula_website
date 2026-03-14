@@ -1,37 +1,40 @@
 @import "tailwindcss";
 
 @theme {
-  --color-obsidian: #05050A;
-  --color-pulsar: #00F0FF;
-  --color-neutron: #E0E6ED;
-  --color-supernova: #FF4500;
-
-  --color-background: var(--color-obsidian);
-  --color-foreground: var(--color-neutron);
-}
-
-@layer base {
-  *,
-  ::after,
-  ::before,
-  ::backdrop,
-  ::file-selector-button {
-    border-color: var(--color-gray-200, currentColor);
-  }
+  --color-gallery: #F9F9FB;
+  --color-grid: #E5E7EB;
+  --color-cobalt: #2E5BFF;
+  --color-cobalt-light: rgba(46, 91, 255, 0.1);
+  --color-copper: #D97757;
+  --color-slate: #1E293B;
+  --color-slate-light: #64748B;
+  
+  --font-inter: var(--font-inter);
+  --font-plex: var(--font-ibm-plex-mono);
 }
 
 body {
-  background-color: var(--color-background);
-  color: var(--color-foreground);
-  font-family: Arial, Helvetica, sans-serif;
-  overflow-x: hidden;
+  background-color: var(--color-gallery);
+  color: var(--color-slate);
+  background-image: radial-gradient(var(--color-grid) 1px, transparent 1px);
+  background-size: 24px 24px;
 }
 
-/* Custom utility for glowing text */
-@utility text-glow-pulsar {
-  text-shadow: 0 0 10px var(--color-pulsar), 0 0 20px var(--color-pulsar);
+/* 3D Utilities for GlassCube */
+.perspective-1000 {
+  perspective: 1000px;
 }
-
-@utility text-glow-supernova {
-  text-shadow: 0 0 10px var(--color-supernova), 0 0 20px var(--color-supernova);
+.transform-style-3d {
+  transform-style: preserve-3d;
 }
+.cube-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+.front  { transform: rotateY(  0deg) translateZ(64px); }
+.back   { transform: rotateY(180deg) translateZ(64px); }
+.right  { transform: rotateY( 90deg) translateZ(64px); }
+.left   { transform: rotateY(-90deg) translateZ(64px); }
+.top    { transform: rotateX( 90deg) translateZ(64px); }
+.bottom { transform: rotateX(-90deg) translateZ(64px); }

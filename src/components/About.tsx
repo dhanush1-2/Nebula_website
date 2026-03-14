@@ -1,101 +1,89 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { ScanFace, MapPin, GraduationCap, Briefcase } from "lucide-react";
+import { useXAI } from "@/context/XAIContext";
+import { MapPin, GraduationCap, Briefcase, FileCode2 } from "lucide-react";
+import HallucinationText from "@/components/HallucinationText";
 
 export default function About() {
+  const { mode } = useXAI();
+
   return (
-    <section id="about" className="relative w-full min-h-screen flex items-center justify-center py-20 px-4 bg-obsidian border-t border-pulsar/10">
-      <div className="max-w-5xl w-full grid grid-cols-1 md:grid-cols-12 gap-12 relative z-10">
+    <section id="about" className="w-full py-24 px-4 bg-white border-t border-gray-100 scroll-mt-24">
+      <div className="max-w-4xl mx-auto flex flex-col md:flex-row gap-12">
         
-        {/* Left Column - Bioscan */}
-        <motion.div 
-          initial={{ opacity: 0, x: -50 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8 }}
-          className="md:col-span-5 relative flex flex-col items-center justify-center"
-        >
-          <div className="relative p-1 rounded-2xl bg-gradient-to-b from-pulsar/40 to-obsidian border border-pulsar/20">
-            <div className="absolute inset-0 bg-pulsar/5 blur-xl rounded-2xl" />
+        {/* Left Column: Bio */}
+        <div className="md:w-2/3">
+          <div className="mb-8">
+            <h2 className="text-3xl font-bold text-slate tracking-tight mb-2">
+              Personnel Profile
+            </h2>
+            <div className="w-12 h-1 bg-cobalt rounded-full"></div>
+          </div>
+
+          <div className="space-y-6 text-slate-light leading-relaxed text-lg">
+            <p>
+              Originating from the <span className="underline decoration-cobalt/30 decoration-dashed hover:text-cobalt cursor-none transition-colors" data-semantic-tag="[Cluster: Origin_Node | Coordinates: 12.97, 77.59]">tech hub of Bangalore</span>, I established a rigorous structural foundation in <span className="underline decoration-cobalt/30 decoration-dashed hover:text-cobalt cursor-none transition-colors" data-semantic-tag="[Vector: CS_Fundamentals | Trust_Score: 0.99]">Computer Science, graduating with an 8.51 CGPA</span> before transitioning to advanced machine learning architecture.
+            </p>
+            <p>
+              Currently, my primary research node is at the <strong className="text-slate font-semibold underline decoration-cobalt/30 decoration-dashed hover:text-cobalt cursor-none transition-colors" data-semantic-tag="[Institution_ID: 0xIU | Sub-Cluster: Kelley_Data]">Indiana University, Kelley School of Business</strong>, pursuing an <span className="underline decoration-cobalt/30 decoration-dashed hover:text-cobalt cursor-none transition-colors" data-semantic-tag="[Vector: Academic_Goal | State: In_Progress]">
+                <HallucinationText realText="M.S. in Data Science (3.71 GPA)" fakeText="Professional Astronaut (Moon Unit)" />
+              </span>. Here, I orchestrate and deploy <span className="underline decoration-cobalt/30 decoration-dashed hover:text-cobalt cursor-none transition-colors" data-semantic-tag="[Pipeline: End_to_End | Architecture: RAG_Agentic]">
+                <HallucinationText realText="end-to-end LLM pipelines" fakeText="quantum warp engines" />
+              </span> utilized daily by faculty for complex data evaluation.
+            </p>
+            <p className="underline decoration-cobalt/30 decoration-dashed hover:text-cobalt cursor-none transition-colors" data-semantic-tag="[System_Objective: Reliability_Engineering]">
+              {mode === "technical" 
+                ? "I specialize in combining deep prompt engineering with robust software engineering to deliver reliable, evaluated AI systems at scale. By reducing hallucinations and creating rigorous evaluation benchmarks, I turn chaotic language models into structured, mission-critical assets."
+                : "I specialize in making AI systems trustworthy. Instead of just building chatbots that hallucinate, I build structured environments that test, evaluate, and verify AI responses so businesses can actually rely on them."}
+            </p>
+          </div>
+        </div>
+
+        {/* Right Column: Key Data Specs */}
+        <div className="md:w-1/3">
+          <div className="bg-gray-50 border border-gray-200 rounded-xl p-6 shadow-sm sticky top-24">
             
-            <div className="relative bg-obsidian rounded-xl p-8 border border-pulsar/30 flex flex-col items-center text-center shadow-[0_0_30px_rgba(0,240,255,0.1)]">
-              {/* Animated Scanner Line */}
-              <motion.div 
-                animate={{ top: ["0%", "100%", "0%"] }}
-                transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-                className="absolute left-0 w-full h-[2px] bg-pulsar/50 shadow-[0_0_8px_#00F0FF] z-20 pointer-events-none"
-              />
-              
-              <ScanFace className="w-16 h-16 text-pulsar mb-6" />
-              
-              <h3 className="text-xl font-bold text-neutron tracking-widest uppercase mb-1">Subject</h3>
-              <p className="text-pulsar font-mono text-sm tracking-widest mb-6">DHANUSH C.</p>
-              
-              <div className="w-full space-y-4 text-left font-mono text-sm">
-                <div className="flex justify-between border-b border-pulsar/20 pb-2">
-                  <span className="text-neutron/60">STATUS:</span>
-                  <span className="text-pulsar">ACTIVE</span>
-                </div>
-                <div className="flex justify-between border-b border-pulsar/20 pb-2">
-                  <span className="text-neutron/60">CLASS:</span>
-                  <span className="text-neutron">AI ENGINEER</span>
-                </div>
-                <div className="flex justify-between border-b border-pulsar/20 pb-2">
-                  <span className="text-neutron/60">RANK:</span>
-                  <span className="text-supernova">MASTER</span>
-                </div>
+            <div className="flex items-center gap-3 mb-6 pb-4 border-b border-gray-200">
+              <div className="w-10 h-10 bg-cobalt/10 rounded-lg flex items-center justify-center text-cobalt">
+                <FileCode2 className="w-5 h-5" />
+              </div>
+              <div>
+                <p className="text-xs font-plex text-gray-400 uppercase tracking-widest">Node ID</p>
+                <p className="font-bold text-slate">DHANUSH C.</p>
               </div>
             </div>
-          </div>
-        </motion.div>
 
-        {/* Right Column - Mission Profile */}
-        <motion.div 
-          initial={{ opacity: 0, x: 50 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="md:col-span-7 flex flex-col justify-center"
-        >
-          <div className="flex items-center gap-4 mb-8">
-            <h2 className="text-3xl md:text-5xl font-bold text-neutron uppercase tracking-wide">
-              Mission <span className="text-pulsar text-glow-pulsar">Profile</span>
-            </h2>
-            <div className="flex-1 h-px bg-gradient-to-r from-pulsar/50 to-transparent" />
-          </div>
+            <ul className="space-y-5">
+              <li>
+                <div className="flex items-center gap-2 mb-1">
+                  <MapPin className="w-4 h-4 text-copper" />
+                  <span className="text-xs font-plex uppercase text-gray-500 font-medium">Server Region</span>
+                </div>
+                <p className="text-sm font-semibold text-slate pl-6">[Geo_Node: BLR] &rarr; [Geo_Node: Bloomington, IN]</p>
+              </li>
+              <li>
+                <div className="flex items-center gap-2 mb-1">
+                  <GraduationCap className="w-4 h-4 text-copper" />
+                  <span className="text-xs font-plex uppercase text-gray-500 font-medium">Knowledge Weights</span>
+                </div>
+                <p className="text-sm font-semibold text-slate pl-6">
+                  <HallucinationText realText="M.S. Data Science (3.71)" fakeText="Galactic Navigation (9.99)" />
+                </p>
+              </li>
+              <li>
+                <div className="flex items-center gap-2 mb-1">
+                  <Briefcase className="w-4 h-4 text-copper" />
+                  <span className="text-xs font-plex uppercase text-gray-500 font-medium">Active Operation</span>
+                </div>
+                <p className="text-sm font-semibold text-slate pl-6">
+                  <HallucinationText realText="Research Asst. @ Kelley" fakeText="Chief Starfleet Officer" />
+                </p>
+              </li>
+            </ul>
 
-          <div className="space-y-6 text-neutron/80 leading-relaxed text-lg">
-            <p>
-              My journey began in the tech capital of India, Bangalore, where I established a rigid foundation in Computer Science, graduating with an 8.51 CGPA.
-            </p>
-            <p>
-              Currently, my primary deployment is at the <span className="text-pulsar font-semibold">Indiana University, Kelley School of Business</span>, pursuing an M.S. in Data Science (3.71 GPA). Here, I architect and deploy end-to-end LLM pipelines adopted daily by faculty.
-            </p>
-            <p>
-              I specialize in combining deep prompt engineering with robust software engineering to deliver reliable, evaluated AI systems at scale. By reducing hallucinations and creating rigorous evaluation benchmarks, I turn chaotic language models into structured, mission-critical assets.
-            </p>
           </div>
+        </div>
 
-          <div className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-4">
-             <div className="p-4 border border-pulsar/20 rounded-lg bg-pulsar/5 flex flex-col items-start hover:border-pulsar/50 transition-colors">
-               <MapPin className="w-6 h-6 text-pulsar mb-2" />
-               <h4 className="text-sm font-bold text-neutron uppercase">Origin/Base</h4>
-               <p className="text-xs text-neutron/60 mt-1">Bangalore → Bloomington, IN</p>
-             </div>
-             <div className="p-4 border border-pulsar/20 rounded-lg bg-pulsar/5 flex flex-col items-start hover:border-pulsar/50 transition-colors">
-               <GraduationCap className="w-6 h-6 text-pulsar mb-2" />
-               <h4 className="text-sm font-bold text-neutron uppercase">Academics</h4>
-               <p className="text-xs text-neutron/60 mt-1">M.S. Data Science (3.71 GPA)</p>
-             </div>
-             <div className="p-4 border border-supernova/20 rounded-lg bg-supernova/5 flex flex-col items-start hover:border-supernova/50 transition-colors">
-               <Briefcase className="w-6 h-6 text-supernova mb-2" />
-               <h4 className="text-sm font-bold text-neutron uppercase">Current Deployment</h4>
-               <p className="text-xs text-neutron/60 mt-1">Research Asst. @ Kelley</p>
-             </div>
-          </div>
-
-        </motion.div>
       </div>
     </section>
   );
