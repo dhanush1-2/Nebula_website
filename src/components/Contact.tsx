@@ -5,7 +5,7 @@ import NeuralFooter from "@/components/NeuralFooter";
 
 export default function Contact() {
   return (
-    <section id="contact" className="w-full py-24 px-4 bg-gray-50 border-t border-gray-200 relative overflow-hidden scroll-mt-24">
+    <section id="contact" className="w-full py-24 px-4 bg-white relative overflow-hidden scroll-mt-24">
       
       {/* Grid Pattern specific to footer */}
       <div className="absolute inset-0 max-w-4xl mx-auto opacity-50 bg-[radial-gradient(#E5E7EB_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none"></div>

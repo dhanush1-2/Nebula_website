@@ -19,7 +19,6 @@ export const metadata: Metadata = {
 };
 
 import { XAIProvider } from "@/context/XAIContext";
-import ComplexityToggle from "@/components/ComplexityToggle";
 import AgenticTracker from "@/components/AgenticTracker";
 import CommandPalette from "@/components/CommandPalette";
 import SemanticCursor from "@/components/SemanticCursor";
@@ -39,7 +38,6 @@ export default function RootLayout({
             {children}
             <ScrollRestorationFix />
             <SemanticCursor />
-            <ComplexityToggle />
             <AgenticTracker />
             <CommandPalette />
           </XAIProvider>

@@ -1,19 +1,13 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { User, Terminal } from "lucide-react";
-import { useXAI } from "@/context/XAIContext";
 import InteractiveLatentMap from "@/components/InteractiveLatentMap";
 import GlassCube from "@/components/GlassCube";
-import TokenText from "@/components/TokenText";
 import MagneticButton from "@/components/MagneticButton";
 
 export default function Hero() {
-  const { mode } = useXAI();
-  const [showCorrection, setShowCorrection] = useState(false);
-  const [factIndex, setFactIndex] = useState(0);
-
   const targetRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: targetRef,
@@ -24,64 +18,7 @@ export default function Hero() {
   const sectionScale = useTransform(scrollYProgress, [0, 1], [1, 0.9]);
   const sectionY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
 
-  const facts = [
-    {
-      rawText: "Core Directive: ",
-      hallucinatedText: "building hype.",
-      technicalCorrected: "Building AI systems that actually work in production.",
-      storyCorrected: "Making AI less hype, more working software."
-    },
-    {
-      rawText: "Identity Classification: ",
-      hallucinatedText: "average coder.",
-      technicalCorrected: "MS Data Science student obsessed with real AI.",
-      storyCorrected: "Data scientist. ML engineer. Recovering perfectionist. Mostly harmless."
-    },
-    {
-      rawText: "Objective Function: ",
-      hallucinatedText: "following tutorials.",
-      technicalCorrected: "Turning LLM research into tools people actually use.",
-      storyCorrected: "Wiring up LLMs so you don't have to."
-    },
-    {
-      rawText: "System Architecture: ",
-      hallucinatedText: "basic web scripts.",
-      technicalCorrected: "From raw data to production ML, end to end.",
-      storyCorrected: "RAG pipelines by day, resume tweaking by night."
-    },
-    {
-      rawText: "Operational Status: ",
-      hallucinatedText: "just experimenting.",
-      technicalCorrected: "AI/ML engineer who ships, not just experiments.",
-      storyCorrected: "I build AI systems. They tend to work."
-    }
-  ];
-
-  useEffect(() => {
-    // Pick random fact on mount, avoiding server/client mismatch by doing it in useEffect
-    setFactIndex(Math.floor(Math.random() * facts.length));
-  }, []);
-
-  useEffect(() => {
-    // Reset animation state when mode changes
-    setShowCorrection(false);
-    const timer = setTimeout(() => {
-      setShowCorrection(true);
-    }, 2500); // Wait for initial typing to finish before correcting
-    return () => clearTimeout(timer);
-  }, [mode, factIndex]);
-
-  const currentFact = facts[factIndex];
-  const rawText = currentFact.rawText;
-  const hallucinatedText = currentFact.hallucinatedText;
-  const correctedText = mode === "technical" 
-    ? currentFact.technicalCorrected
-    : currentFact.storyCorrected;
-
-  const typingCharacter = {
-    hidden: { opacity: 0, scale: 0.8 },
-    show: { opacity: 1, scale: 1 },
-  };
+  const systemText = "AI/ML Engineer who ships, not just experiments.";
 
   return (
     <section ref={targetRef} id="hero" className="w-full min-h-[90vh] flex flex-col items-center justify-center px-4 py-20 relative overflow-hidden">
@@ -146,11 +83,10 @@ export default function Hero() {
               <p className="text-sm font-semibold text-cobalt mb-1">System</p>
               
               <div className="text-slate text-lg leading-relaxed font-medium min-h-[80px]">
-                {/* 1. Base Text */}
                 <motion.span>
-                  {rawText.split("").map((char, index) => (
+                  {systemText.split("").map((char, index) => (
                     <motion.span 
-                      key={`raw-${index}`} 
+                      key={`sys-${index}`} 
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ duration: 0.05, delay: index * 0.03 }}
@@ -159,45 +95,6 @@ export default function Hero() {
                     </motion.span>
                   ))}
                 </motion.span>
-                
-                {/* 2. Hallucinated Text (Gets crossed out) */}
-                <span className="relative inline-block">
-                  <motion.span>
-                    {hallucinatedText.split("").map((char, index) => (
-                      <motion.span 
-                        key={`hal-${index}`}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 0.05, delay: (rawText.length * 0.03) + (index * 0.03) }}
-                      >
-                        {char}
-                      </motion.span>
-                    ))}
-                  </motion.span>
-                  {/* The red strikethrough */}
-                  <motion.div 
-                    className="absolute left-0 top-1/2 h-[3px] bg-red-500 rounded-full w-full origin-left"
-                    initial={{ scaleX: 0, opacity: 0 }}
-                    animate={showCorrection ? { scaleX: 1, opacity: 0.8 } : { scaleX: 0, opacity: 0 }}
-                    transition={{ duration: 0.3, ease: "easeOut" }}
-                  />
-                </span>
-
-                {/* 3. Corrected Text */}
-                <AnimatePresence>
-                  {showCorrection && (
-                    <motion.span 
-                      className="ml-2 text-cobalt relative"
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.4 }}
-                    >
-                      {/* Subtly render a logic node icon */}
-                      <span className="absolute -left-3 top-2 w-1.5 h-1.5 rounded-sm bg-cobalt opacity-50"></span>
-                      {correctedText}
-                    </motion.span>
-                  )}
-                </AnimatePresence>
               </div>
 
               {/* Action Buttons */}
