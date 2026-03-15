@@ -12,7 +12,7 @@ export default function NeuralFooter() {
     { id: "dhanush", x: 50, y: 50, label: "[Entity: Dhanush]", type: "core", icon: null, href: null },
     { id: "linkedin", x: 20, y: 20, label: "LinkedIn", type: "social", icon: Linkedin, href: "https://www.linkedin.com/in/dhanush-chandra-shekar-85a2101b0/" },
     { id: "github", x: 80, y: 20, label: "GitHub", type: "social", icon: Github, href: "https://github.com/dhanush1-2" },
-    { id: "email", x: 50, y: 85, label: "dchandr@iu.edu", type: "social", icon: Mail, href: "mailto:dchandr@iu.edu" },
+    { id: "email", x: 50, y: 85, label: "dhanush12232002@gmail.com", type: "social", icon: Mail, href: "mailto:dhanush12232002@gmail.com" },
     { id: "skill_rag", x: 20, y: 70, label: "RAG & Agents", type: "skill", icon: Code2, href: null },
     { id: "skill_data", x: 80, y: 70, label: "Data Pipelines", type: "skill", icon: Database, href: null },
   ];
