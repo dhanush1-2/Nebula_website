@@ -115,11 +115,12 @@ export default function Hero() {
                 
                 <MagneticButton intensity={0.2}>
                   <a 
-                    href="/Dhanush_AI_Engineer.pdf"
-                    download="Dhanush_AI_Engineer.pdf"
+                    href="https://drive.google.com/file/d/1u3SKlrpoRDxuh1-DSmf6dm13VwNGw6PO/view?usp=sharing"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="px-5 py-2.5 bg-white border border-gray-200 text-slate text-sm font-medium rounded-lg hover:bg-gray-50 hover:border-gray-300 transition-colors block"
                   >
-                    Download CV
+                    View CV
                   </a>
                 </MagneticButton>
                 
