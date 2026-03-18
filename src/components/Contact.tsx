@@ -38,8 +38,8 @@ export default function Contact() {
             </a>
             
             <a 
-              href="/Dhanush_Resume.docx"
-              download="Dhanush_Chandra_Shekar_Resume.docx"
+              href="/Dhanush_AI_Engineer.pdf"
+              download="Dhanush_AI_Engineer.pdf"
               className="w-full sm:w-auto flex items-center justify-center gap-2 group bg-white text-slate border border-gray-200 px-6 py-3 rounded hover:bg-gray-50 transition-colors cursor-pointer"
             >
               <Download className="w-4 h-4 text-copper group-hover:-translate-y-1 transition-transform" />

@@ -115,8 +115,8 @@ export default function Hero() {
                 
                 <MagneticButton intensity={0.2}>
                   <a 
-                    href="/Dhanush_Resume.docx"
-                    download="Dhanush_Chandra_Shekar_Resume.docx"
+                    href="/Dhanush_AI_Engineer.pdf"
+                    download="Dhanush_AI_Engineer.pdf"
                     className="px-5 py-2.5 bg-white border border-gray-200 text-slate text-sm font-medium rounded-lg hover:bg-gray-50 hover:border-gray-300 transition-colors block"
                   >
                     Download CV

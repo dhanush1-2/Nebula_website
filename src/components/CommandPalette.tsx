@@ -135,7 +135,7 @@ export default function CommandPalette() {
 
                   <Command.Group heading="External Links" className="text-xs font-bold text-gray-400 font-plex uppercase tracking-wider px-2 py-2 mt-2">
                     <Command.Item 
-                      onSelect={() => runCommand(() => window.open("/Dhanush_Resume.docx", "_blank"))}
+                      onSelect={() => runCommand(() => window.open("/Dhanush_AI_Engineer.pdf", "_blank"))}
                       className="flex items-center gap-3 px-3 py-2.5 rounded-md cursor-pointer text-sm text-slate hover:bg-gray-50 aria-selected:bg-copper/10 aria-selected:text-copper transition-colors"
                     >
                       <Database className="w-4 h-4" />
